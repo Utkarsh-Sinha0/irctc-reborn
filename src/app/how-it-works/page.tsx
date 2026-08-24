@@ -5,7 +5,7 @@
 
 const ROWS: { screen: string; real: string; mocked: string; production: string }[] = [
   { screen: "Login / persona chips", real: "Session cookie (HMAC-signed)", mocked: "Identity & OTP", production: "AADHAAR/OTP identity adapter · WCAG 3.3.8 no-cognitive-test login" },
-  { screen: "Search & availability", real: "Deterministic engine + seeded history", mocked: "Live seat counts", production: "Railways availability API w/ 3–5s snapshot cache" },
+  { screen: "Search — One-Shot Availability Matrix", real: "Single-request GN+TQ+PT × every class, engine-computed; mirrors new-gov-site capacity goals (150K bookings/min target)", mocked: "Live seat counts", production: "Railways availability API w/ 3–5s snapshot cache" },
   { screen: "Confirmation bands (“92% likely”)", real: "Mirrors CRIS tool live since Jun 2018 (PIB)", mocked: "The model itself", production: "LightGBM on booking history — IEEE ICACCTech 2024 reports 96.67% acc" },
   { screen: "Fare sheet", real: "Fare engine (integer paise, tested)", mocked: "Tariff table", production: "PRS fare rules service" },
   { screen: "Cancellation slider", real: "Apr-2026 rule matrix, boundary-tested", mocked: "—", production: "Same published rules; auto-refund via ledger" },
