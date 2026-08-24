@@ -1,22 +1,31 @@
 "use client";
-/* G1-WHY: fare sheet + cancel slider (M14/M15) — the product-thinking centerpiece.
-   Every ₹ visible; total==sum from engine; slider maps hours→refundQuote live (EN+हिं).
-   G2-BEST: pure render of engine outputs; distance/class fixed by fixture contract;
-   method fees inline (edge D3). G3-FUTURE: S. */
+/* G1-WHY: fare sheet + cancel slider (M14/M15) — product-thinking centerpiece.
+   Audit-2 F2 fix: scenario/train/cls/date/quota arrive as PROPS (no location at render —
+   SSR-safe). Every ₹ visible; total==sum from engine; slider live via refundQuote.
+   G2-BEST: pure render of engine outputs; distance from server page by station pair.
+   G3-FUTURE: S. */
 import { useMemo, useState } from "react";
-import { computeFare, withMethodFee, METHOD_SPEED_RANK } from "@/engine/fare-rules";
+import { computeFare, withMethodFee, METHOD_SPEED_RANK, type PayMethod } from "@/engine/fare-rules";
 import { refundQuote } from "@/engine/cancel-matrix";
 
-const METHOD_LABEL = { IPAY: "iPay wallet · fastest · no fee", UPI: "UPI · fast", CARD: "Card", NETBANKING: "Net banking · slowest" } as const;
+const METHOD_LABEL: Record<PayMethod, string> = {
+  IPAY: "iPay wallet · fastest · no fee",
+  UPI: "UPI · fast",
+  CARD: "Card",
+  NETBANKING: "Net banking · slowest",
+};
 
 export default function FareSheet({
-  persona, ids, idempotencyKey, travelClass: clsParam, distanceKm,
-}: { persona: string; ids: string[]; idempotencyKey: string; travelClass?: string; distanceKm?: number }) {
-  // Real selection flows through URL (defect fix); fixture contract remains the fallback.
-  const travelClass = (clsParam && ["1A","EC","2A","3A","3E","CC","SL","2S"].includes(clsParam) ? clsParam : "3A") as
+  persona, ids, idempotencyKey,
+  travelClass = "3A", distanceKm = 1480, quota = "TQ",
+  date, train, scenario = "clean",
+}: {
+  persona: string; ids: string[]; idempotencyKey: string;
+  travelClass?: string; distanceKm?: number; quota?: string;
+  date?: string; train?: string; scenario?: string;
+}) {
+  const tc = (["1A", "EC", "2A", "3A", "3E", "CC", "SL", "2S"].includes(travelClass) ? travelClass : "3A") as
     "1A" | "EC" | "2A" | "3A" | "3E" | "CC" | "SL" | "2S";
-  const [distance] = [distanceKm ?? 1480];
-  const quota = "TQ" as const;
 
   const paxCount = Math.max(ids.filter(Boolean).length, 1);
   const passengers = useMemo(
@@ -24,21 +33,30 @@ export default function FareSheet({
     [paxCount]
   );
 
-  const base = useMemo(() => computeFare({ distanceKm: distance, travelClass, quota, passengers }), [distance, quota, passengers]);
+  const base = useMemo(() => computeFare({ distanceKm, travelClass: tc, quota: quota as "GN" | "TQ" | "PT" | "LD" | "SS" | "HP", passengers }), [distanceKm, tc, quota, passengers]);
 
-  const [method, setMethod] = useState<(typeof METHOD_SPEED_RANK)[number]>("IPAY");
+  const [method, setMethod] = useState<PayMethod>("IPAY");
   const priced = useMemo(() => withMethodFee(base, method), [base, method]);
 
   // Cancel-outcome slider: hours before departure 4..120
   const [hours, setHours] = useState(72);
   const refund = useMemo(() => refundQuote({
-    totalFarePaise: priced.totalPaise, travelClass, hoursBeforeDeparture: hours, passengersCount: paxCount,
-    status: "CONFIRMED",
+    totalFarePaise: priced.totalPaise, travelClass: tc, hoursBeforeDeparture: hours, passengersCount: paxCount, status: "CONFIRMED",
   }), [priced.totalPaise, hours, paxCount]);
+
+  function payHref(): string {
+    const sp = new URLSearchParams({ persona, key: idempotencyKey, method, ids: ids.join(","), scenario });
+    if (train) sp.set("train", train);
+    if (date) sp.set("date", date);
+    return `/book/pay?${sp.toString()}`;
+  }
 
   return (
     <section className="pt-6">
-      <h1 className="text-2xl font-bold text-primary-dark">Your fare, in full daylight</h1>
+      <a href={train ? `/book/passengers?persona=${persona}&train=${train}&cls=${tc}&date=${date ?? ""}&quota=${quota}&scenario=${scenario}` : "/"}
+        className="text-base text-primary underline underline-offset-2">← back</a>
+      <h1 className="mt-3 text-2xl font-bold text-primary-dark">Your fare, in full daylight</h1>
+      <p className="text-base opacity-70">{tc} · {distanceKm} km · {quota === "TQ" ? "Tatkal" : "General"} quota</p>
 
       <ul className="mt-4 rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-surface-3">
         {priced.lines.map(l => (
@@ -85,10 +103,8 @@ export default function FareSheet({
         </div>
       </fieldset>
 
-      <a
-        href={`/book/pay?persona=${persona}&key=${idempotencyKey}&method=${method}&ids=${ids}&scenario=${new URLSearchParams(location.search).get("scenario") ?? ""}`}
-        className="mt-5 flex min-h-12 items-center justify-center rounded-xl bg-primary font-semibold text-white active:scale-[.99] transition"
-      >
+      <a href={payHref()}
+        className="mt-5 flex min-h-12 items-center justify-center rounded-xl bg-primary font-semibold text-white active:scale-[.99] transition">
         Pay securely →
       </a>
     </section>

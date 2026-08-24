@@ -11,7 +11,10 @@ const ROWS: { screen: string; real: string; mocked: string; production: string }
   { screen: "Cancellation slider", real: "Apr-2026 rule matrix, boundary-tested", mocked: "—", production: "Same published rules; auto-refund via ledger" },
   { screen: "Payment", real: "FSM + idempotency keys (Stripe pattern); sweep reconciliation", mocked: "Gateway & money", production: "PCI-DSS gateway adapter; outbox → reconciler" },
   { screen: "Tatkal rush queue", real: "Fair-queue UX pattern (Cloudflare Waiting Room)", mocked: "Edge infrastructure", production: "Token-bucket FIFO at CDN edge; payment completions bypass" },
-  { screen: "Notifications / timeline", real: "Deterministic event stream", mocked: "SMS/Push delivery", production: "Outbox consumers → SMS/Push/WhatsApp (Bhashini i18n at scale)" },
+  { screen: "Ticket celebration & .ics download", real: "Deterministic PNR from idempotency key; page verifies cookie-stored machine truly reached TICKET_ISSUED", mocked: "PNR itself, coach/berth allotment, calendar dates", production: "PRS ticketing service issues real PNRs; calendar dates = actual journey" },
+  { screen: "Journey timeline events", real: "Event-stream rendering from scenario clock", mocked: "Live train position data", production: "Railway live-feed adapter (NTES-class source)" },
+  { screen: "Session security", real: "HMAC-signed HttpOnly cookies; set SESSION_SECRET env in production (see .env.example)", mocked: "—", production: "Real identity sessions + server-side booking store (multi-instance needs shared secret)" },
+  { screen: "Home status chip (“operational ✓ · updated 10 min ago”)", real: "The health-transparency UI pattern (dossier-D lesson)", mocked: "The live status value", production: "Real dependency health from monitoring" },
 ];
 
 export default function HowItWorks() {

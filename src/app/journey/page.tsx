@@ -23,6 +23,7 @@ export default async function JourneyPage({ searchParams }: { searchParams: Prom
     <section className="pt-6">
       <h1 className="text-2xl font-bold text-primary-dark">Journey timeline</h1>
       <p className="mt-1 opacity-70">PNR <span className="tabular-nums font-semibold">{pnr.slice(0, 5)}·{pnr.slice(5)}</span></p>
+      <a href={`/book/ticket?persona=demo&key=${encodeURIComponent(pnr)}&bookingId=&ids=x&scenario=${scenario}`} className="mt-1 inline-block text-base text-primary underline underline-offset-2">← back to ticket</a>
 
       <ol className="mt-5 space-y-0">
         {events.map((e, i) => (

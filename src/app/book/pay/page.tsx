@@ -1,5 +1,5 @@
-/* G1-WHY: pay route wrapper (M18/M19).
-   G2-BEST: server page passes params; theater is the only client island.
+/* G1-WHY: pay route wrapper (M18/M19) — forwards scenario + context (audit-2 F1);
+   adds back-link target info. G2-BEST: server page; theater is the only island.
    G3-FUTURE: S. */
 import PayTheater from "@/app/components/PayTheater";
 
@@ -12,6 +12,8 @@ export default async function PayPage({ searchParams }: { searchParams: Promise<
       method={sp.method ?? "IPAY"}
       ids={(sp.ids ?? "").split(",").filter(Boolean)}
       scenario={sp.scenario ?? "clean"}
+      train={sp.train}
+      date={sp.date}
     />
   );
 }

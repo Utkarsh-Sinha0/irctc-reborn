@@ -15,7 +15,7 @@ function pnrFromKey(key: string): string {
 const BURST = Array.from({ length: 10 }, (_, i) => i);
 const ANGLES = [0, 36, 72, 108, 144, 180, 216, 252, 288, 324];
 
-export default function TicketCelebration({ persona, idempotencyKey, ids }: { persona: string; idempotencyKey: string; ids: string[] }) {
+export default function TicketCelebration({ persona, idempotencyKey, ids, scenario = "clean" }: { persona: string; idempotencyKey: string; ids: string[]; scenario?: string }) {
   const pnr = useMemo(() => pnrFromKey(idempotencyKey), [idempotencyKey]);
   const count = Math.max(ids.length, 1);
 
@@ -73,7 +73,7 @@ export default function TicketCelebration({ persona, idempotencyKey, ids }: { pe
                 className="flex min-h-12 items-center justify-center rounded-xl bg-primary font-semibold text-white active:scale-[.99] transition">
                 📅 Add to calendar
               </a>
-              <a href={`/journey?pnr=${pnr}`}
+              <a href={`/journey?pnr=${pnr}&scenario=${scenario}`}
                 className="flex min-h-12 items-center justify-center rounded-xl bg-surface-3 font-semibold text-primary-dark">
                 View journey timeline →
               </a>

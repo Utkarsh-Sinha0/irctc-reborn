@@ -12,14 +12,17 @@ type Phase =
   | { k: "done" } | { k: "error"; text: string };
 
 export default function PayTheater({
-  persona, idempotencyKey, method, ids, scenario,
-}: { persona: string; idempotencyKey: string; method: string; ids: string[]; scenario: string }) {
+  persona, idempotencyKey, method, ids, scenario, train, date,
+}: { persona: string; idempotencyKey: string; method: string; ids: string[]; scenario: string; train?: string; date?: string }) {
   const [phase, setPhase] = useState<Phase>({ k: "idle" });
   const bookingIdRef = useRef<string>(crypto.randomUUID());
 
   const goTicket = useCallback(() => {
-    location.assign(`/book/ticket?persona=${persona}&key=${idempotencyKey}&ids=${ids.join(",")}`);
-  }, [persona, idempotencyKey, ids]);
+    const sp = new URLSearchParams({ persona, key: idempotencyKey, ids: ids.join(","), bookingId: bookingIdRef.current, scenario });
+    if (train) sp.set("train", train);
+    if (date) sp.set("date", date);
+    location.assign(`/book/ticket?${sp.toString()}`);
+  }, [persona, idempotencyKey, ids, train, date, scenario]);
 
   const pay = useCallback(async () => {
     setPhase({ k: "narrating", text: "Securing your seats…" });
@@ -73,6 +76,8 @@ export default function PayTheater({
     <LazyMotion features={domAnimation} strict>
       <section className="pt-6">
         <h1 className="text-2xl font-bold text-primary-dark">Payment</h1>
+
+        <a href={`/book/fare?persona=${persona}&key=${idempotencyKey}&method=${method}&ids=${ids.join(",")}${train ? `&train=${train}` : ""}`} className="text-base text-primary underline underline-offset-2">← back to fare</a>
 
         <m.div
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}

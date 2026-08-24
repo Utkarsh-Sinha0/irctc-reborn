@@ -1,7 +1,8 @@
 "use client";
 /* G1-WHY: search form + results (M07–M11) — the golden path's decision screen.
-   G2-BEST: client island calls /api/search (URL params mirrored for shareability);
-   bands/worst-case rendered straight from payload — no UI math. Skeleton min 400ms.
+   G2-BEST: client island calls /api/search with scenario passthrough (audit-2 F1);
+   class selection is explicit (tap card → ✓) and rides the URL to passengers/fare
+   (kills F3 drift). SSR-safe: location never read at render (F2 pattern avoided).
    G3-FUTURE: S — scenario param passes through untouched. */
 import { useCallback, useEffect, useState } from "react";
 
@@ -12,7 +13,10 @@ type Avail = {
   confirmBandPct: number; worstCase: string; autoRefundIfNot: boolean;
   noteKey?: "high" | "medium" | "low" | "rac";
 };
-type Group = { train: { number: string; name: string; depTime: string; arrTime: string; durationMin: number }; availabilities: Avail[] };
+type Group = {
+  train: { number: string; name: string; depTime: string; arrTime: string; durationMin: number };
+  availabilities: Avail[];
+};
 
 const KIND_STYLE: Record<Avail["kind"], string> = {
   AVAILABLE: "bg-success/10 text-success",
@@ -20,17 +24,16 @@ const KIND_STYLE: Record<Avail["kind"], string> = {
   WL: "bg-error/10 text-error",
 };
 
-export default function SearchForm({ initialQuota }: { initialQuota: "GN" | "TQ" }) {
+export default function SearchForm({ initialQuota, scenario }: { initialQuota: "GN" | "TQ"; scenario: string }) {
   const tomorrow = new Date(Date.now() + 864e5).toISOString().slice(0, 10);
   const [from, setFrom] = useState("PUNE");
   const [to, setTo] = useState("NDLS");
   const [date, setDate] = useState(tomorrow);
   const [quota, setQuota] = useState<"GN" | "TQ">(initialQuota);
   const [loading, setLoading] = useState(false);
-  const [minWait, setMinWait] = useState(false);
   const [groups, setGroups] = useState<Group[] | null>(null);
   const [err, setErr] = useState<string | null>(null);
-  // selected class+train carried in URL so fare sheet quotes the real choice (defect fix: hardcoded 3A)
+  // selected train+class carried forward in URLs so fare quotes the real choice (F3)
   const [sel, setSel] = useState<{ train: string; cls: string } | null>(null);
 
   const search = useCallback(async () => {
@@ -38,19 +41,27 @@ export default function SearchForm({ initialQuota }: { initialQuota: "GN" | "TQ"
     setLoading(true); setErr(null); setGroups(null);
     const t0 = Date.now();
     try {
-      const res = await fetch(`/api/search?from=${from}&to=${to}&date=${date}&quota=${quota}`);
+      const res = await fetch(`/api/search?from=${from}&to=${to}&date=${date}&quota=${quota}&scenario=${encodeURIComponent(scenario)}`);
       const json = await res.json();
       if (!json.ok) throw new Error(json.error?.message ?? "search failed");
-      // skeleton min-display 400ms (no flash)
-      const wait = Math.max(0, 400 - (Date.now() - t0));
+      const wait = Math.max(0, 400 - (Date.now() - t0)); // skeleton min 400ms (no flash)
       setTimeout(() => { setGroups(json.data.groups); setLoading(false); }, wait);
-      setMinWait(true);
     } catch {
       setErr("Search failed. Check connection and retry."); setLoading(false);
     }
-  }, [from, to, date, quota]);
+  }, [from, to, date, quota, scenario]);
 
-  useEffect(() => { if (initialQuota === "TQ") search(); /* auto-search armed entries */ }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { void search(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /** URL contract: every hop carries scenario + journey context (audit-2 F1). */
+  function onward(nextPath: string): string {
+    if (!sel) return "#";
+    const sp = new URLSearchParams({
+      persona: "priya", train: sel.train, cls: sel.cls,
+      date, quota, key: crypto.randomUUID(), scenario,
+    });
+    return `${nextPath}?${sp.toString()}`;
+  }
 
   return (
     <section className="pt-6">
@@ -92,30 +103,29 @@ export default function SearchForm({ initialQuota }: { initialQuota: "GN" | "TQ"
         {err && <p role="alert" className="rounded-xl bg-white px-3 py-2 text-error ring-1 ring-error/40">⚠ {err}</p>}
       </form>
 
-      {(loading || groups) && (
-        <div aria-live="polite" className="mt-5 grid gap-3">
-          {loading && !groups &&
-            [0, 1, 2].map(i => (
-              <div key={i} className="h-28 animate-pulse rounded-2xl bg-surface ring-1 ring-surface-3" />
-            ))}
-          {!loading && groups?.length === 0 && (
-            <p className="rounded-2xl bg-surface p-4 ring-1 ring-surface-3">
-              No direct trains found. Try nearby dates or a popular pair like PUNE→NDLS.
+      <div aria-live="polite" className="mt-5 grid gap-3">
+        {loading && !groups &&
+          [0, 1, 2].map(i => (
+            <div key={i} className="h-28 animate-pulse rounded-2xl bg-surface ring-1 ring-surface-3" />
+          ))}
+        {!loading && groups?.length === 0 && (
+          <p className="rounded-2xl bg-surface p-4 ring-1 ring-surface-3">
+            No direct trains found. Try nearby dates or a popular pair like PUNE→NDLS.
+          </p>
+        )}
+        {groups?.map(g => (
+          <article key={g.train.number} className="rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-surface-3">
+            <header className="flex items-baseline justify-between">
+              <h2 className="font-semibold">{g.train.name}</h2>
+              <span className="text-base opacity-60">#{g.train.number}</span>
+            </header>
+            <p className="tabular-nums opacity-80">
+              {g.train.depTime} → {g.train.arrTime} · {Math.floor(g.train.durationMin / 60)}h {g.train.durationMin % 60}m
             </p>
-          )}
-          {groups?.map(g => (
-            <article key={g.train.number} className="rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-surface-3">
-              <header className="flex items-baseline justify-between">
-                <h2 className="font-semibold">{g.train.name}</h2>
-                <span className="text-base opacity-60">#{g.train.number}</span>
-              </header>
-              <p className="tabular-nums opacity-80">
-                {g.train.depTime} → {g.train.arrTime} · {Math.floor(g.train.durationMin / 60)}h {g.train.durationMin % 60}m
-              </p>
-              <ul className="mt-3 grid gap-2">
-                {g.availabilities.map(a => {
-                  const isSel = sel?.train === g.train.number && sel?.cls === a.travelClass;
-                  return (
+            <ul className="mt-3 grid gap-2">
+              {g.availabilities.map(a => {
+                const isSel = sel?.train === g.train.number && sel?.cls === a.travelClass;
+                return (
                   <li key={`${a.travelClass}-${a.quota}`}>
                     <button
                       type="button"
@@ -137,23 +147,20 @@ export default function SearchForm({ initialQuota }: { initialQuota: "GN" | "TQ"
                       </p>
                     </button>
                   </li>
-                  );
-                })}
-              </ul>
-              <a
-                aria-disabled={!sel || sel.train !== g.train.number}
-                href={sel && sel.train === g.train.number
-                  ? `/book/passengers?persona=${new URLSearchParams(location.search).get("guest") ? "priya" : "priya"}&train=${g.train.number}&cls=${sel.cls}&date=${date}&quota=${quota}`
-                  : undefined}
-                onClick={(e) => { if (!sel || sel.train !== g.train.number) e.preventDefault(); }}
-                className={`mt-3 flex min-h-12 items-center justify-center rounded-xl font-semibold text-white transition ${sel && sel.train === g.train.number ? "bg-primary active:scale-[.99]" : "pointer-events-none bg-primary/40"}`}
-              >
-                {sel && sel.train === g.train.number ? "Select & add passengers →" : "Pick a class above to continue"}
-              </a>
-            </article>
-          ))}
-        </div>
-      )}
+                );
+              })}
+            </ul>
+            <a
+              aria-disabled={!sel || sel.train !== g.train.number}
+              href={sel && sel.train === g.train.number ? onward("/book/passengers") : undefined}
+              onClick={(e) => { if (!sel || sel.train !== g.train.number) e.preventDefault(); }}
+              className={`mt-3 flex min-h-12 items-center justify-center rounded-xl font-semibold text-white transition ${sel && sel.train === g.train.number ? "bg-primary active:scale-[.99]" : "pointer-events-none bg-primary/40"}`}
+            >
+              {sel && sel.train === g.train.number ? "Select & add passengers →" : "Pick a class above to continue"}
+            </a>
+          </article>
+        ))}
+      </div>
     </section>
   );
 }

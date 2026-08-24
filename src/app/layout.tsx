@@ -17,6 +17,13 @@ const mukta = Mukta({
 export const metadata: Metadata = {
   title: "IRCTC Reborn · यात्रा",
   description: "A citizen-first rebuild of India's train booking experience — demo with synthetic data.",
+  openGraph: {
+    title: "IRCTC Reborn · यात्रा",
+    description: "The train-booking experience India deserves — Tatkal mode, honest waitlist bands, payment-failure recovery. Demo with synthetic data.",
+    type: "website",
+    locale: "en_IN",
+  },
+  twitter: { card: "summary", title: "IRCTC Reborn · यात्रा", description: "A citizen-first rebuild of India's train booking experience." },
 };
 
 export const viewport: Viewport = {
