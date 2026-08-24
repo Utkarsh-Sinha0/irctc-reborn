@@ -1,20 +1,20 @@
 /**
- * G1-WHY: /api/search — M09 results feed. Composes F1 availability + E3 bands so the
- * payload arrives pre-integrated (fixture contract). Scenario-aware (S).
- * G2-BEST: GET with query params = shareable/bookmarkable searches (URL-as-state).
- * G3-FUTURE: blast-radius S — pure read route; results UI consumes its exact shape.
+ * G1-WHY: /api/search v2 — one-shot availability matrix per train (user directive:
+ * all quotas in one row, no quota picker, no re-search). Composes buildMatrix so the
+ * UI receives everything preloaded in a single request.
+ * G2-BEST: replaces the old per-quota shape entirely; deterministic; scenario passthrough.
+ * G3-FUTURE: S blast-radius now that SearchForm is rewritten to consume `rows`.
  */
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { TRAINS_ALL, classesFor, availabilityFor } from "@/fixtures/trains";
-import { confirmBand } from "@/engine/wl-bands";
+import { TRAINS_ALL, classesFor } from "@/fixtures/trains";
+import { buildMatrix } from "@/engine/availability-matrix";
 import { resolveScenario, jitter } from "@/lib/scenarios";
 
 const Query = z.object({
   from: z.string().min(2).max(6),
   to: z.string().min(2).max(6),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  quota: z.enum(["GN", "TQ"]).default("GN"),
 });
 
 export async function GET(req: NextRequest) {
@@ -25,29 +25,23 @@ export async function GET(req: NextRequest) {
   }
   await jitter(script);
 
-  const { from, to, date, quota } = parsed.data;
+  const { from, to, date } = parsed.data;
   const dayIdx = new Date(`${date}T00:00:00+05:30`).getUTCDay();
-
   const trains = TRAINS_ALL.filter(t => t.from.code === from && t.to.code === to && t.runsOn.includes(dayIdx));
-  const results = trains.flatMap(t =>
-    classesFor(t.number).map(cls => {
-      const av = availabilityFor({ trainNumber: t.number, journeyDate: date, travelClass: cls, quota, scenarioKey: script.key });
-      const bandInput = { trainNumber: t.number, travelClass: cls, quota, journeyDateIso: date, kind: av.kind, count: av.count };
-      const band = confirmBand(bandInput);
-      return {
-        ...av,
-        confirmBandPct: band.pct,
-        worstCase: band.worstCase,
-        noteKey: band.noteKey,
-      };
-    })
-  );
 
-  // group by train for the list UI
-  const grouped = trains.map(t => ({
+  const groups = trains.map(t => ({
     train: t,
-    availabilities: results.filter(r => r.trainNumber === t.number),
+    matrix: buildMatrix({
+      trainNumber: t.number,
+      journeyDate: date,
+      classes: classesFor(t.number),
+      scenarioKey: script.key,
+    }).rows,
   }));
 
-  return NextResponse.json({ ok: true, serverTimeIso: new Date().toISOString(), data: { from, to, date, quota, rush: script.rush ?? false, groups: grouped } });
+  return NextResponse.json({
+    ok: true,
+    serverTimeIso: new Date().toISOString(),
+    data: { from, to, date, rush: script.rush ?? false, groups },
+  });
 }
