@@ -1,7 +1,9 @@
 /* G1-WHY: Honesty console (M34) — the scored Honesty criterion made beautiful.
    Maps every screen → real vs mocked vs production integration; scale-plane story;
-   all citations from dossier-H. G2-BEST: pure RSC, one table, zero JS.
+   all citations from dossier-H; axe sweep runs live (audit-3 M6 fix).
+   G2-BEST: pure RSC + one client island for the sweep; zero JS elsewhere.
    G3-FUTURE: S — rows appended as features land. */
+import AxeSweep from "@/app/components/AxeSweep";
 
 const ROWS: { screen: string; real: string; mocked: string; production: string }[] = [
   { screen: "Login / persona chips", real: "Session cookie (HMAC-signed)", mocked: "Identity & OTP", production: "AADHAAR/OTP identity adapter · WCAG 3.3.8 no-cognitive-test login" },
@@ -65,6 +67,8 @@ export default function HowItWorks() {
           <li>METR RCT (2025) — we log where AI helped vs didn&apos;t (see CODEX_LOG.md)</li>
         </ul>
       </div>
+
+      <AxeSweep />
     </section>
   );
 }

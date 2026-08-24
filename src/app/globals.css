@@ -32,6 +32,7 @@
 html { font-size: 100%; scroll-behavior: smooth; }
 html[data-fs="lg"] { font-size: 112.5%; }
 html[data-fs="xl"] { font-size: 125%; }
+html[data-fs="2xl"] { font-size: 150%; }
 
 body {
   background: var(--color-surface-2);
