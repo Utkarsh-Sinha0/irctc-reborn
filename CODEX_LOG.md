@@ -9,3 +9,4 @@
 | Aug 24 | S5 | audit-2 fixes (F1-F4 + minors m1/m3/m5/m6) + e2e-flagship.py: 7/7 checks PASS against live prod server | SHIP-CANDIDATE |
 | Aug 24 | S6 | 100% line/function coverage push: full FSM transition matrix, fixture branches, RAC band, rng.pick — 53 tests | 100% stmts+funcs |
 | Aug 24 | S7 | One-Shot Availability Matrix: GN+TQ+PT per class in one row, single request, cell-tap booking; matrix engine + tests + UI table rewrite | 57 tests, build+E2E green |
+| Aug 25 | S8 | Accessibility audit (doc 11): IRCTC has/lacks ledger from official PDFs+PIL+community; our fixes — colorblind glyphs on cells, HC mode AAA, A-/A+ toolbar shipped (was missing!), read-aloud PNR | claims code-verified |

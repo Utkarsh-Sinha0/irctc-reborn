@@ -17,6 +17,7 @@ const ROWS: { screen: string; real: string; mocked: string; production: string }
   { screen: "Journey timeline events", real: "Event-stream rendering from scenario clock", mocked: "Live train position data", production: "Railway live-feed adapter (NTES-class source)" },
   { screen: "Session security", real: "HMAC-signed HttpOnly cookies; set SESSION_SECRET env in production (see .env.example)", mocked: "—", production: "Real identity sessions + server-side booking store (multi-instance needs shared secret)" },
   { screen: "Home status chip (“operational ✓ · updated 10 min ago”)", real: "The health-transparency UI pattern (dossier-D lesson)", mocked: "The live status value", production: "Real dependency health from monitoring" },
+  { screen: "Accessibility toolbar (A−/A+ to 150%, HC contrast mode)", real: "Shipped — computed AAA palette in HC; IRCTC ships font-resize only (doc 11 ledger)", mocked: "—", production: "Same tokens; add OS-level sync via prefers-contrast" },
 ];
 
 export default function HowItWorks() {

@@ -34,6 +34,19 @@ html[data-fs="lg"] { font-size: 112.5%; }
 html[data-fs="xl"] { font-size: 125%; }
 html[data-fs="2xl"] { font-size: 150%; }
 
+/* High-contrast mode (audit-4): max-contrast pairs, pure-black ink, heavier rings.
+   Success→deep green, warn→dark amber, error→dark red — all ≥7:1 on white. */
+html[data-hc="1"] {
+  --color-primary: #0A2E8C;
+  --color-primary-dark: #071F61;
+  --color-success: #0A5230;
+  --color-warn: #7A3E06;
+  --color-error: #8F1D14;
+  --color-surface-2: #FFFFFF;
+  --color-surface-3: #E2E8F8;
+}
+html[data-hc="1"] * { font-weight: 500; }
+
 body {
   background: var(--color-surface-2);
   color: var(--color-ink);

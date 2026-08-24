@@ -29,6 +29,8 @@ const KIND_DOT: Record<Cell["kind"], string> = {
   RAC: "bg-warn",
   WL: "bg-error",
 };
+/** Color-blind redundancy: kind is never color-only — glyph + word always ride along (audit-4). */
+const KIND_GLYPH: Record<Cell["kind"], string> = { AVAILABLE: "✓", RAC: "◐", WL: "⏳" };
 const KIND_TEXT: Record<Cell["kind"], string> = {
   AVAILABLE: "text-success",
   RAC: "text-warn",
@@ -149,6 +151,7 @@ export default function SearchForm({ initialQuota, scenario }: { initialQuota?: 
                           >
                             <span className="flex items-center gap-1.5">
                               <span className={`inline-block h-2 w-2 rounded-full ${KIND_DOT[cell.kind]}`} aria-hidden />
+                              <span aria-hidden className={`font-semibold ${KIND_TEXT[cell.kind]}`}>{KIND_GLYPH[cell.kind]}</span>
                               <span className={`font-semibold ${KIND_TEXT[cell.kind]}`}>{label}</span>
                             </span>
                             <span className="block text-sm opacity-75">{bandLine}</span>
