@@ -5,6 +5,7 @@
 import { PERSONAS, type PersonaId } from "@/fixtures/passengers";
 import { TRAINS_ALL } from "@/fixtures/trains";
 import TatkalCountdown from "@/app/components/TatkalCountdown";
+import NotifyInbox from "@/app/components/NotifyInbox";
 
 export function generateStaticParams() {
   return Object.keys(PERSONAS).map((persona) => ({ persona }));
@@ -108,6 +109,8 @@ export default async function PersonaHome({ params }: { params: Promise<{ person
           Availability services · operational ✓ · updated 10 min ago
         </div>
       </div>
+
+      <NotifyInbox persona="priya" />
     </section>
   );
 }

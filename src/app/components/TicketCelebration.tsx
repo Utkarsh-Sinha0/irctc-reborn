@@ -6,6 +6,7 @@
 import { useMemo } from "react";
 import { LazyMotion, domAnimation, m } from "motion/react";
 import { hashSeed } from "@/lib/rng";
+import ReadAloudPNR from "@/app/components/ReadAloudPNR";
 
 function pnrFromKey(key: string): string {
   const n = hashSeed(key) % 100000000000; // ≤ 11 digits
@@ -73,6 +74,7 @@ export default function TicketCelebration({ persona, idempotencyKey, ids, scenar
                 className="flex min-h-12 items-center justify-center rounded-xl bg-primary font-semibold text-white active:scale-[.99] transition">
                 📅 Add to calendar
               </a>
+              <ReadAloudPNR pnr={pnr} />
               <a href={`/journey?pnr=${pnr}&scenario=${scenario}`}
                 className="flex min-h-12 items-center justify-center rounded-xl bg-surface-3 font-semibold text-primary-dark">
                 View journey timeline →
