@@ -24,17 +24,13 @@ describe("WLBands — determinism & sanity (edge H5)", () => {
     }
   });
 
-  it("deeper waitlists never get higher bands than shallow ones on the same train/date (monotonic property)", () => {
+  it("deeper waitlists get non-increasing bands than shallow ones on the same train/date (monotonic property)", () => {
     // For a fixed seeded pool, band(count) must be non-increasing as queue grows.
     let prev = 101;
     for (let count = 1; count <= 60; count++) {
       const r = confirmBand({ ...base, kind: "WL", count });
-      if (!bandMonotonic(prev, r.pct)) {
-        // allow only the documented seed-shift at pool boundaries? No — strict by design:
-        expect.soft(r.pct, `count=${count}`).toBeLessThanOrEqual(prev);
-      }
-      prev = Math.min(prev, r.pct) === prev && prev !== 101 ? Math.min(prev, r.pct) : r.pct;
-      // simpler invariant enforced below
+      expect(r.pct).toBeLessThanOrEqual(prev); // STRICT: any increase fails the build
+      prev = r.pct;
       expect(r.pct).toBeGreaterThanOrEqual(0);
     }
   });

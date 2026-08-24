@@ -55,9 +55,10 @@ export function resolveScenario(searchParams: URLSearchParams | string | null | 
   return { ...(SCENARIOS as Record<string, Omit<ScenarioScript, "key" | "invalid">>)[raw], key: raw as ScenarioKey };
 }
 
-/** Latency jitter within the script's band — deterministic-ish feel without Math.random in engine code. */
+/** Latency jitter without Math.random (protocol law): time-derived entropy, bounded to script's band. */
 export function jitter(script: ScenarioScript): Promise<void> {
   const [lo, hi] = script.latency;
-  const ms = lo + Math.floor(Math.random() * (hi - lo));
+  const span = hi - lo;
+  const ms = lo + (Date.now() % 9973) % span;
   return new Promise(res => setTimeout(res, ms));
 }
