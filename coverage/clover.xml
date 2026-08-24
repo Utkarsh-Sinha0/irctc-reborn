@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1787594324399" clover="3.2.0">
+  <project timestamp="1787594324399" name="All files">
+    <metrics statements="104" coveredstatements="104" conditionals="87" coveredconditionals="79" methods="23" coveredmethods="23" elements="214" coveredelements="206" complexity="0" loc="104" ncloc="104" packages="3" files="6" classes="6"/>
+    <package name="engine">
+      <metrics statements="70" coveredstatements="70" conditionals="64" coveredconditionals="62" methods="13" coveredmethods="13"/>
+      <file name="booking-fsm.ts" path="E:\Career\hackathon\OpenAI H\irctc\src\engine\booking-fsm.ts">
+        <metrics statements="15" coveredstatements="15" conditionals="21" coveredconditionals="21" methods="3" coveredmethods="3"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="65" count="14" type="stmt"/>
+        <line num="73" count="55" type="stmt"/>
+        <line num="79" count="55" type="cond" truecount="2" falsecount="0"/>
+        <line num="80" count="15" type="cond" truecount="5" falsecount="0"/>
+        <line num="81" count="1" type="stmt"/>
+        <line num="83" count="14" type="cond" truecount="4" falsecount="0"/>
+        <line num="84" count="2" type="stmt"/>
+        <line num="88" count="52" type="stmt"/>
+        <line num="89" count="52" type="cond" truecount="2" falsecount="0"/>
+        <line num="91" count="47" type="stmt"/>
+        <line num="92" count="47" type="cond" truecount="4" falsecount="0"/>
+        <line num="93" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="96" count="47" type="stmt"/>
+      </file>
+      <file name="cancel-matrix.ts" path="E:\Career\hackathon\OpenAI H\irctc\src\engine\cancel-matrix.ts">
+        <metrics statements="22" coveredstatements="22" conditionals="19" coveredconditionals="19" methods="2" coveredmethods="2"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="32" count="14" type="cond" truecount="2" falsecount="0"/>
+        <line num="33" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="34" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="61" count="9" type="cond" truecount="1" falsecount="0"/>
+        <line num="63" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="64" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="69" count="1" type="stmt"/>
+        <line num="74" count="7" type="stmt"/>
+        <line num="75" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="76" count="1" type="stmt"/>
+        <line num="80" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="81" count="3" type="stmt"/>
+        <line num="82" count="3" type="stmt"/>
+        <line num="87" count="3" type="stmt"/>
+        <line num="88" count="3" type="stmt"/>
+        <line num="89" count="3" type="stmt"/>
+        <line num="90" count="3" type="stmt"/>
+      </file>
+      <file name="fare-rules.ts" path="E:\Career\hackathon\OpenAI H\irctc\src\engine\fare-rules.ts">
+        <metrics statements="19" coveredstatements="19" conditionals="14" coveredconditionals="13" methods="6" coveredmethods="6"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="48" count="9" type="stmt"/>
+        <line num="49" count="17" type="stmt"/>
+        <line num="51" count="9" type="stmt"/>
+        <line num="52" count="9" type="stmt"/>
+        <line num="53" count="9" type="stmt"/>
+        <line num="54" count="9" type="cond" truecount="3" falsecount="1"/>
+        <line num="55" count="9" type="stmt"/>
+        <line num="57" count="9" type="stmt"/>
+        <line num="66" count="46" type="stmt"/>
+        <line num="71" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="72" count="3" type="stmt"/>
+        <line num="73" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="75" count="4" type="stmt"/>
+        <line num="76" count="15" type="cond" truecount="2" falsecount="0"/>
+        <line num="78" count="15" type="stmt"/>
+      </file>
+      <file name="wl-bands.ts" path="E:\Career\hackathon\OpenAI H\irctc\src\engine\wl-bands.ts">
+        <metrics statements="14" coveredstatements="14" conditionals="10" coveredconditionals="9" methods="2" coveredmethods="2"/>
+        <line num="33" count="78" type="stmt"/>
+        <line num="35" count="78" type="cond" truecount="2" falsecount="0"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="39" count="76" type="stmt"/>
+        <line num="41" count="76" type="stmt"/>
+        <line num="43" count="76" type="cond" truecount="2" falsecount="0"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="49" count="75" type="stmt"/>
+        <line num="52" count="75" type="cond" truecount="2" falsecount="0"/>
+        <line num="53" count="41" type="cond" truecount="2" falsecount="0"/>
+        <line num="54" count="15" type="stmt"/>
+        <line num="56" count="75" type="stmt"/>
+        <line num="66" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="fixtures">
+      <metrics statements="21" coveredstatements="21" conditionals="23" coveredconditionals="17" methods="6" coveredmethods="6"/>
+      <file name="trains.ts" path="E:\Career\hackathon\OpenAI H\irctc\src\fixtures\trains.ts">
+        <metrics statements="21" coveredstatements="21" conditionals="23" coveredconditionals="17" methods="6" coveredmethods="6"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="25" count="16" type="stmt"/>
+        <line num="26" count="16" type="stmt"/>
+        <line num="27" count="16" type="stmt"/>
+        <line num="30" count="2" type="stmt"/>
+        <line num="34" count="16" type="stmt"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="55" count="2" type="stmt"/>
+        <line num="66" count="2" type="stmt"/>
+        <line num="71" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="72" count="1" type="stmt"/>
+        <line num="83" count="12" type="cond" truecount="1" falsecount="0"/>
+        <line num="84" count="12" type="stmt"/>
+        <line num="85" count="12" type="stmt"/>
+        <line num="89" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="91" count="3" type="cond" truecount="2" falsecount="2"/>
+        <line num="92" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="96" count="9" type="cond" truecount="3" falsecount="1"/>
+        <line num="97" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="102" count="12" type="stmt"/>
+        <line num="109" count="9" type="stmt"/>
+      </file>
+    </package>
+    <package name="lib">
+      <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
+      <file name="rng.ts" path="E:\Career\hackathon\OpenAI H\irctc\src\lib\rng.ts">
+        <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
+        <line num="10" count="91" type="stmt"/>
+        <line num="11" count="91" type="stmt"/>
+        <line num="12" count="216" type="stmt"/>
+        <line num="13" count="216" type="stmt"/>
+        <line num="14" count="216" type="stmt"/>
+        <line num="15" count="216" type="stmt"/>
+        <line num="16" count="216" type="stmt"/>
+        <line num="22" count="91" type="stmt"/>
+        <line num="23" count="91" type="stmt"/>
+        <line num="24" count="1962" type="stmt"/>
+        <line num="25" count="1962" type="stmt"/>
+        <line num="27" count="91" type="stmt"/>
+        <line num="32" count="20" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>
