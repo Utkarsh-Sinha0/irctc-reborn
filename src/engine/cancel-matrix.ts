@@ -45,7 +45,9 @@ export interface RefundInput {
   travelClass: TravelClass;
   hoursBeforeDeparture: number;
   passengersCount: number;
-  /** WL tickets: ₹20+GST/passenger if cancelled ≥4h before departure (pre-revision figure — reverify before demo day, flagged in dossier-A) */
+  /** WL tickets: ₹20+GST/passenger if cancelled ≥4h before departure.
+   *  VERIFIED Aug 25: official IRCTC CancellationRules PDF (contents.irctc.co.in) states
+   *  ₹20+GST; unchanged by the Apr-2026 revision. Aggregators showing ₹60 are stale. */
   status?: "CONFIRMED" | "WAITLISTED" | "RAC";
 }
 
