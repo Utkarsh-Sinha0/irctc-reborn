@@ -12,7 +12,7 @@ import urllib.request
 import uuid
 
 sys.stdout.reconfigure(encoding="utf-8")
-BASE = "http://localhost:3113"
+BASE = "https://irctc-pi-kohl.vercel.app"
 SC = "pay-fail-recover"
 KEY = str(uuid.uuid4())
 BID = str(uuid.uuid4())
@@ -54,12 +54,13 @@ s, body = call("/api/auth", {"personaId": "priya"})
 print("auth:", s, body["data"]["personaId"], "| cookie captured:", "yatra_session" in COOKIE)
 ok &= s == 200 and "yatra_session" in COOKIE
 
-# 2. search with scenario threaded through
+# 2. search with scenario threaded through (v2 shape: matrix rows)
 s, d = call(f"/api/search?from=PUNE&to=NDLS&date=2026-09-15&quota=TQ&scenario={SC}")
 groups = d["data"]["groups"]
 train = groups[0]["train"]["number"]
-cls = groups[0]["availabilities"][0]["travelClass"]
-print(f"search: {len(groups)} train(s); first={train} class={cls} bands={[a['confirmBandPct'] for a in groups[0]['availabilities']]}")
+cls = groups[0]["matrix"][0]["travelClass"]
+bands = [c["confirmBandPct"] for row in groups[0]["matrix"][:1] for c in row["cells"]]
+print(f"search: {len(groups)} train(s); first={train} class={cls} bands(row1)={bands}")
 ok &= len(groups) > 0
 
 # 3. fare page SSRs cleanly (audit-2 F2 fixed — no location-at-render crash)
