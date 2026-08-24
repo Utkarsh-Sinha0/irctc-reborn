@@ -47,7 +47,7 @@ export const TRAINS_ALL: TrainSummary[] = [
   t("22435", "Vande Bharat (Varanasi)","NDLS", "AY",   "06:00", "14:00", [0,1,2,3,4,5,6]),
   t("12137", "Punjab Mail",            "CSMT", "NDLS", "19:35", "20:10", [0,1,2,3,4,5,6]),
   t("12309", "Rajendra Nagar Raj",     "PNBE", "NDLS", "19:00", "07:20", [0,1,2,3,4,5,6]),
-  t("12290", "Duronto Express",        "PUNE", "NDLS", "08:10", "04:05", [2,4,6]),
+  t("12290", "Duronto Express",        "PUNE", "NDLS", "08:10", "04:05", [0,1,2,3,4,5,6]),
   t("22962", "Karnataka Superfast",    "PUNE", "ADI",  "15:30", "23:45", [0,1,2,3,4,5,6]),
 ];
 
