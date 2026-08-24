@@ -10,11 +10,12 @@ import { refundQuote } from "@/engine/cancel-matrix";
 const METHOD_LABEL = { IPAY: "iPay wallet · fastest · no fee", UPI: "UPI · fast", CARD: "Card", NETBANKING: "Net banking · slowest" } as const;
 
 export default function FareSheet({
-  persona, ids, idempotencyKey,
-}: { persona: string; ids: string[]; idempotencyKey: string }) {
-  // Fixture contract for the demo corridor: Pune→NDLS ≈ 1480 km, 3A (matches search defaults).
-  const [distance] = [1480];
-  const travelClass = "3A" as const;
+  persona, ids, idempotencyKey, travelClass: clsParam, distanceKm,
+}: { persona: string; ids: string[]; idempotencyKey: string; travelClass?: string; distanceKm?: number }) {
+  // Real selection flows through URL (defect fix); fixture contract remains the fallback.
+  const travelClass = (clsParam && ["1A","EC","2A","3A","3E","CC","SL","2S"].includes(clsParam) ? clsParam : "3A") as
+    "1A" | "EC" | "2A" | "3A" | "3E" | "CC" | "SL" | "2S";
+  const [distance] = [distanceKm ?? 1480];
   const quota = "TQ" as const;
 
   const paxCount = Math.max(ids.filter(Boolean).length, 1);

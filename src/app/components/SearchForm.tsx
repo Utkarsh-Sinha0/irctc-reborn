@@ -30,6 +30,8 @@ export default function SearchForm({ initialQuota }: { initialQuota: "GN" | "TQ"
   const [minWait, setMinWait] = useState(false);
   const [groups, setGroups] = useState<Group[] | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  // selected class+train carried in URL so fare sheet quotes the real choice (defect fix: hardcoded 3A)
+  const [sel, setSel] = useState<{ train: string; cls: string } | null>(null);
 
   const search = useCallback(async () => {
     if (from === to) { setErr("Origin and destination must differ."); return; }
@@ -111,28 +113,42 @@ export default function SearchForm({ initialQuota }: { initialQuota: "GN" | "TQ"
                 {g.train.depTime} → {g.train.arrTime} · {Math.floor(g.train.durationMin / 60)}h {g.train.durationMin % 60}m
               </p>
               <ul className="mt-3 grid gap-2">
-                {g.availabilities.map(a => (
-                  <li key={`${a.travelClass}-${a.quota}`} className={`rounded-xl p-3 ${KIND_STYLE[a.kind]}`}>
-                    <div className="flex items-center justify-between font-semibold">
-                      <span>{a.travelClass} · ₹ fare on next step</span>
-                      <span className="rounded-full bg-white/70 px-2 py-0.5 text-sm">{a.kind}{a.kind !== "AVAILABLE" ? ` ${a.count}` : ` ${a.count}`}</span>
-                    </div>
-                    <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/70">
-                      <div className="h-full rounded-full bg-current opacity-80" style={{ width: `${a.confirmBandPct}%` }} />
-                    </div>
-                    <p className="mt-1 text-base">
-                      <strong data-testid={`band-${g.train.number}-${a.travelClass}`}>{a.confirmBandPct}% likely</strong>
-                      {" · worst case: "}{a.worstCase}
-                      {a.autoRefundIfNot ? " · auto-refund if not confirmed" : ""}
-                    </p>
+                {g.availabilities.map(a => {
+                  const isSel = sel?.train === g.train.number && sel?.cls === a.travelClass;
+                  return (
+                  <li key={`${a.travelClass}-${a.quota}`}>
+                    <button
+                      type="button"
+                      onClick={() => setSel({ train: g.train.number, cls: a.travelClass })}
+                      aria-pressed={isSel}
+                      className={`w-full rounded-xl p-3 text-left ring-1 transition ${KIND_STYLE[a.kind]} ${isSel ? "ring-primary ring-2" : "ring-transparent hover:ring-surface-3"}`}
+                    >
+                      <div className="flex items-center justify-between font-semibold">
+                        <span>{a.travelClass}{isSel ? " ✓ selected" : ""}</span>
+                        <span className="rounded-full bg-white/70 px-2 py-0.5 text-sm">{a.kind} {a.count}</span>
+                      </div>
+                      <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/70">
+                        <div className="h-full rounded-full bg-current opacity-80" style={{ width: `${a.confirmBandPct}%` }} />
+                      </div>
+                      <p className="mt-1 text-base">
+                        <strong data-testid={`band-${g.train.number}-${a.travelClass}`}>{a.confirmBandPct}% likely</strong>
+                        {" · worst case: "}{a.worstCase}
+                        {a.autoRefundIfNot ? " · auto-refund if not confirmed" : ""}
+                      </p>
+                    </button>
                   </li>
-                ))}
+                  );
+                })}
               </ul>
               <a
-                href={`/book/passengers?train=${g.train.number}&date=${date}&quota=${quota}`}
-                className="mt-3 flex min-h-12 items-center justify-center rounded-xl bg-primary font-semibold text-white active:scale-[.99] transition"
+                aria-disabled={!sel || sel.train !== g.train.number}
+                href={sel && sel.train === g.train.number
+                  ? `/book/passengers?persona=${new URLSearchParams(location.search).get("guest") ? "priya" : "priya"}&train=${g.train.number}&cls=${sel.cls}&date=${date}&quota=${quota}`
+                  : undefined}
+                onClick={(e) => { if (!sel || sel.train !== g.train.number) e.preventDefault(); }}
+                className={`mt-3 flex min-h-12 items-center justify-center rounded-xl font-semibold text-white transition ${sel && sel.train === g.train.number ? "bg-primary active:scale-[.99]" : "pointer-events-none bg-primary/40"}`}
               >
-                Select & add passengers →
+                {sel && sel.train === g.train.number ? "Select & add passengers →" : "Pick a class above to continue"}
               </a>
             </article>
           ))}
