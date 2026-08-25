@@ -77,30 +77,25 @@ export default function SearchForm({ initialQuota, scenario }: { initialQuota?: 
       <h1 className="text-2xl font-bold text-primary-dark">Where to?</h1>
       <p className="mt-1 text-base opacity-75">Every class · every quota · one screen — pick your cell.</p>
 
-      <form className="mt-4 grid gap-3 rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-surface-3"
-        onSubmit={(e) => { e.preventDefault(); void search(); }}>
-        <div className="grid grid-cols-2 gap-3">
-          <label className="text-base font-medium">From
-            <input value={from} onChange={e => setFrom(e.target.value.toUpperCase())}
-              className="mt-1 w-full min-h-12 rounded-xl border border-surface-3 bg-surface-2 px-3 font-semibold uppercase" maxLength={6} />
-          </label>
-          <label className="text-base font-medium">To
-            <input value={to} onChange={e => setTo(e.target.value.toUpperCase())}
-              className="mt-1 w-full min-h-12 rounded-xl border border-surface-3 bg-surface-2 px-3 font-semibold uppercase" maxLength={6} />
-          </label>
-        </div>
-        <div className="grid grid-cols-[1fr_auto] gap-3">
-          <label className="text-base font-medium">Date
-            <input type="date" value={date} onChange={e => setDate(e.target.value)}
-              className="mt-1 w-full min-h-12 rounded-xl border border-surface-3 bg-surface-2 px-3" />
-          </label>
-          {/* live search on date change — no submit needed */}
-          <button type="submit" disabled={loading}
-            className="self-end min-h-12 rounded-xl bg-primary px-6 font-semibold text-white active:scale-[.99] transition disabled:opacity-60">
-            {loading ? "…" : "Search"}
-          </button>
-        </div>
-        {err && <p role="alert" className="rounded-xl bg-white px-3 py-2 text-error ring-1 ring-error/40">⚠ {err}</p>}
+      <form className="mt-4 grid gap-3 rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-surface-3 md:grid-cols-[1fr_1fr_1fr_auto] md:items-end">
+        <label className="text-base font-medium">From
+          <input value={from} onChange={e => setFrom(e.target.value.toUpperCase())}
+            className="mt-1 w-full min-h-12 rounded-xl border border-surface-3 bg-surface-2 px-3 font-semibold uppercase" maxLength={6} />
+        </label>
+        <label className="text-base font-medium">To
+          <input value={to} onChange={e => setTo(e.target.value.toUpperCase())}
+            className="mt-1 w-full min-h-12 rounded-xl border border-surface-3 bg-surface-2 px-3 font-semibold uppercase" maxLength={6} />
+        </label>
+        <label className="text-base font-medium">Date
+          <input type="date" value={date} onChange={e => setDate(e.target.value)}
+            className="mt-1 w-full min-h-12 rounded-xl border border-surface-3 bg-surface-2 px-3" />
+        </label>
+        {/* live search on date change — no submit needed */}
+        <button type="submit" disabled={loading}
+          className="min-h-12 rounded-xl bg-primary px-8 font-semibold text-white active:scale-[.99] transition disabled:opacity-60">
+          {loading ? "…" : "Search"}
+        </button>
+        {err && <p role="alert" className="rounded-xl bg-white px-3 py-2 text-error ring-1 ring-error/40 md:col-span-4">⚠ {err}</p>}
       </form>
 
       <div aria-live="polite" className="mt-5 grid gap-3">

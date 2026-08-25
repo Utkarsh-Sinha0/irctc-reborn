@@ -4,16 +4,16 @@
 @import "tailwindcss";
 
 :root {
-  --color-primary: #1B4DDB;
-  --color-primary-dark: #0F2E8C;
-  --color-accent: #E8871E;        /* graphic accents ONLY — fails AA as text */
+  --color-primary: #1359D1;      /* rail link blue — IRCTC-familiar */
+  --color-primary-dark: #0B2E6F; /* IRCTC-nav navy */
+  --color-accent: #F26522;       /* IRCTC CTA orange */
   --color-success: #1B7F4D;
   --color-warn: #B45309;
   --color-error: #C0392B;
-  --color-ink: #111827;
+  --color-ink: #17233B;
   --color-surface: #FFFFFF;
-  --color-surface-2: #F4F6FB;
-  --color-surface-3: #EEF2FF;
+  --color-surface-2: #F5F7FB;
+  --color-surface-3: #EDF2FA;
 }
 
 @theme inline {

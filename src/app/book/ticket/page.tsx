@@ -2,7 +2,7 @@
    booking machine is truly TICKET_ISSUED before rendering celebration; otherwise shows
    an honest "no completed booking" state. G2-BEST: server-side verification via session
    signer; no client trust. G3-FUTURE: M — this is where a real bookings store slots in. */
-import TicketCelebration from "@/app/components/TicketCelebration";
+import TicketCard from "@/app/components/TicketCard";
 import { verifyPayload, SESSION_COOKIE } from "@/lib/session";
 import type { BookingMachine } from "@/engine/booking-fsm";
 import { cookies } from "next/headers";
@@ -37,5 +37,5 @@ export default async function TicketPage({ searchParams }: { searchParams: Promi
     );
   }
 
-  return <TicketCelebration persona={sp.persona ?? "priya"} idempotencyKey={key} ids={ids} scenario={sp.scenario ?? "clean"} />;
+  return <TicketCard idempotencyKey={key} ids={ids} scenario={sp.scenario ?? "clean"} />;
 }
