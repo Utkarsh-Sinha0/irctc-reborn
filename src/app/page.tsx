@@ -24,6 +24,35 @@ export default function Landing() {
 
   return (
     <div className="grid gap-6">
+      {/* Hero: the real orange-snake livery shot + official drone footage embed */}
+      <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+        <section className="vb-hero">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#FFB37A]">Vande Bharat · the train this product is built for</p>
+          <h2 className="mt-1 text-2xl font-extrabold leading-tight lg:text-3xl">Booking should move<br />as fast as the train.</h2>
+          <p className="mt-2 max-w-md text-sm leading-relaxed text-white/85">
+            One search shows every class × every quota. Payment failures recover themselves.
+            Refunds are visible before you cancel.
+          </p>
+          <p className="mt-3 text-[11px] text-white/60">Photo: Vande Bharat Express, CC BY-SA 4.0, Wikimedia Commons</p>
+        </section>
+
+        <section className="overflow-hidden rounded-2xl border border-surface-3 bg-surface shadow-sm">
+          <div className="aspect-video w-full">
+            <iframe
+              className="h-full w-full"
+              src="https://www.youtube.com/embed/gwX-mo0_Xy8"
+              title="Vande Bharat drone view — Western Ghats (West Central Railway, official)"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+          </div>
+          <p className="px-3 py-2 text-[11px] leading-tight opacity-60">
+            Official drone footage via West Central Railway, YouTube · the viral &ldquo;orange snake&rdquo; ghat-section run
+          </p>
+        </section>
+      </div>
+
       {/* Vande Bharat sweep banner */}
       <VandeBharatSweep />
 
