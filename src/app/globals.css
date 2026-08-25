@@ -1,19 +1,21 @@
-/* G1-WHY: Ashoka Tech tokens (dossier-E §2.3) — single source of visual truth.
-   G2-BEST: CSS vars + Tailwind v4 @theme mapping; marigold restricted to graphics (AA guardrail).
-   G3-FUTURE: L blast-radius — theme renames would touch every screen; names frozen for the sprint. */
+/* G1-WHY: IRCTC-faithful tokens — sampled from the real site's chrome (navy #213877-ish
+ * header, orange CTAs, light-grey body, PrimeNG-style cards) so the replica is instantly
+ * recognizable. Same token names as before so no component breaks.
+ * G2-BEST: CSS vars only; HC mode still overrides.
+ * G3-FUTURE: L blast-radius — frozen for sprint. */
 @import "tailwindcss";
 
 :root {
-  --color-primary: #1359D1;      /* rail link blue — IRCTC-familiar */
-  --color-primary-dark: #0B2E6F; /* IRCTC-nav navy */
-  --color-accent: #F26522;       /* IRCTC CTA orange */
-  --color-success: #1B7F4D;
-  --color-warn: #B45309;
-  --color-error: #C0392B;
-  --color-ink: #17233B;
+  --color-primary: #1F4297;      /* IRCTC header blue */
+  --color-primary-dark: #162E66; /* darker navy band */
+  --color-accent: #F7941D;       /* IRCTC orange CTA */
+  --color-success: #2E8B57;
+  --color-warn: #C77700;
+  --color-error: #D32F2F;
+  --color-ink: #1A1A2E;
   --color-surface: #FFFFFF;
-  --color-surface-2: #F5F7FB;
-  --color-surface-3: #EDF2FA;
+  --color-surface-2: #F4F4F4;    /* real IRCTC body grey */
+  --color-surface-3: #E8EAF2;
 }
 
 @theme inline {
@@ -34,8 +36,6 @@ html[data-fs="lg"] { font-size: 112.5%; }
 html[data-fs="xl"] { font-size: 125%; }
 html[data-fs="2xl"] { font-size: 150%; }
 
-/* High-contrast mode (audit-4): max-contrast pairs, pure-black ink, heavier rings.
-   Success→deep green, warn→dark amber, error→dark red — all ≥7:1 on white. */
 html[data-hc="1"] {
   --color-primary: #0A2E8C;
   --color-primary-dark: #071F61;
@@ -43,21 +43,20 @@ html[data-hc="1"] {
   --color-warn: #7A3E06;
   --color-error: #8F1D14;
   --color-surface-2: #FFFFFF;
-  --color-surface-3: #E2E8F8;
+  --color-surface-3: #DDE3F0;
 }
 html[data-hc="1"] * { font-weight: 500; }
 
 body {
   background: var(--color-surface-2);
   color: var(--color-ink);
-  font-size: 1.125rem;      /* 18px elderly-first base */
+  font-size: 1.125rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Focus always visible (WCAG 2.4.11/2.4.13) */
 :focus-visible {
-  outline: 3px solid var(--color-primary);
+  outline: 3px solid var(--color-accent);
   outline-offset: 2px;
 }
 
@@ -69,53 +68,39 @@ body {
   }
 }
 
-/* ── Art.tsx animation library (SVG scenes) — transform/opacity only ── */
+/* ── Art.tsx animation library ── */
 @keyframes artTrainRun { from { transform: translateX(0); } to { transform: translateX(360px); } }
 .art-train-run { animation: artTrainRun 2.6s linear infinite; }
-
 @keyframes artTrackTie { from { transform: translateX(0); opacity: .9; } to { transform: translateX(-20px); opacity: .35; } }
 .art-track-tie { animation: artTrackTie 0.9s linear infinite; }
-
 @keyframes artPuff { 0% { transform: translate(0,0) scale(.6); opacity:.85; } 100% { transform: translate(-26px,-30px) scale(1.5); opacity:0; } }
 .art-puff { animation: artPuff 1.05s ease-out infinite; }
-
 @keyframes artBlink { 0%,100% { opacity:.25; } 50% { opacity:1; } }
 .art-blink { animation: artBlink 1s ease-in-out infinite; }
-
 @keyframes artDriftSlow { from { transform: translateX(-8px);} to { transform: translateX(10px);} }
 .art-drift-slow { animation: artDriftSlow 7s ease-in-out infinite alternate; }
-
 @keyframes artRays { 0% { opacity:.35; transform: rotate(0deg) scale(.96);} 50% {opacity:.7;} 100% { opacity:.35; transform: rotate(14deg) scale(1.04);} }
 .art-rays { animation: artRays 3.2s ease-in-out infinite; }
-
 @keyframes artConfetti { 0% { transform: translateY(-10px) rotate(0deg); opacity:0;} 25% { opacity:1;} 100% { transform: translateY(16px) rotate(160deg); opacity:0;} }
 .art-confetti { animation: artConfetti 1.6s ease-in infinite; }
-
 @keyframes artTicketPop { 0% { transform: scale(.7) rotateX(28deg); opacity:0;} 60% { transform: scale(1.04) rotateX(0);} 100% { transform: scale(1); opacity:1;} }
 .art-ticket-pop { animation: artTicketPop .55s cubic-bezier(.2,.9,.3,1.2) both; }
-
 @keyframes artSeal { 0% { transform: scale(.4); opacity:0;} 70% { transform: scale(1.12); opacity:1;} 100% { transform: scale(1);} }
 .art-seal { animation: artSeal .5s cubic-bezier(.2,.9,.3,1.3) .15s both; }
-
 @keyframes artCheckDraw { from { stroke-dasharray: 40; stroke-dashoffset: 40; } to { stroke-dashoffset: 0; } }
 .art-check-draw { stroke-dasharray: 40; animation: artCheckDraw .45s ease-out .5s both; }
 
-/* ── IndiaRouteArt: Vande Bharat sets riding SVG paths ── */
-/* Consist origin is its own center so offset-path + scale reads correctly. */
+/* ── IndiaRouteArt ── */
 .art-vb-consist { offset-rotate: auto; offset-distance: 0%; }
-
 @keyframes artVbRunA {
-  /* Kashmir→Kanyakumari: rises toward screen (scale up mid-route), then descends */
   0%   { offset-distance: 0%;   transform: scale(.5);  opacity: 0; }
   8%   { opacity: 1; }
-  38%  { transform: scale(1.18); }           /* "rising up towards the screen" on the curve */
+  38%  { transform: scale(1.18); }
   55%  { transform: scale(1.05); }
   100% { offset-distance: 100%; transform: scale(.62); opacity: .95; }
 }
 .art-vb-run-a { animation: artVbRunA 3.4s cubic-bezier(.45,.05,.35,.95) infinite alternate; }
-
 @keyframes artVbRunB {
-  /* NE→Gujarat, same feel, phase-shifted so both are visible simultaneously */
   0%   { offset-distance: 0%;   transform: scale(.5);  opacity: 0; }
   10%  { opacity: 1; }
   42%  { transform: scale(1.14); }
@@ -123,79 +108,52 @@ body {
   100% { offset-distance: 100%; transform: scale(.6); opacity: .95; }
 }
 .art-vb-run-b { animation: artVbRunB 3.8s cubic-bezier(.45,.05,.35,.95) infinite alternate; animation-delay: .4s; }
-
 @keyframes artRouteDraw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 .art-route-draw { stroke-dasharray: 1; animation: artRouteDraw 2.2s ease-out both; }
-
 @keyframes artArrivePulse { 0% { transform: scale(.4); opacity: 0; } 30% { opacity: .9; } 100% { transform: scale(2.6); opacity: 0; } }
 .art-arrive-pulse { animation: artArrivePulse 1.4s ease-out infinite; transform-origin: center; transform-box: fill-box; }
 
-/* ── VandeBharatSweep: outline train gliding right→left (orange-snake livery) ── */
+/* ── VandeBharatSweep ── */
 .vb-sweep-stage {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
+  position: relative; overflow: hidden; width: 100%;
   border-radius: 1rem;
-  background:
-    linear-gradient(180deg, #FFF7F0 0%, #FFEFE2 60%, #FCE3D2 100%);
+  background: linear-gradient(180deg, #FFF7F0 0%, #FFEFE2 60%, #FCE3D2 100%);
   border: 1px solid #F6D9C4;
 }
 .vb-sweep-svg { display: block; width: 100%; height: auto; }
-
 .vb-outline { stroke: #B24A12; fill: none; }
 .vb-windshield { stroke: #B24A12; fill: rgba(23,35,59,.16); }
 .vb-roofline { stroke: #D98B4E; stroke-width: 2; }
 .vb-orange-band { stroke: url(#vbOrangeGrad); fill: none; }
 .vb-track { stroke: #E3B99A; }
 .vb-track-thin { stroke: #EBC9AF; }
-
 @keyframes vbSweep { from { transform: translateX(0); } to { transform: translateX(-680px); } }
 .vb-consist { animation: vbSweep 7s linear infinite; will-change: transform; }
-
-/* subtle speed lines behind the train */
 .vb-sweep-stage::after {
-  content: "";
-  position: absolute; inset: auto 0 18% 0; height: 2px;
+  content: ""; position: absolute; inset: auto 0 18% 0; height: 2px;
   background: repeating-linear-gradient(90deg, transparent 0 26px, rgba(242,101,34,.30) 26px 44px);
-  animation: vbSweep 1.1s linear infinite;
-  pointer-events: none;
+  animation: vbSweep 1.1s linear infinite; pointer-events: none;
 }
 
-/* hero photo banner using the real viral-livery shot */
+/* hero photo banner */
 .vb-hero {
-  position: relative;
-  border-radius: 1rem;
-  overflow: hidden;
+  position: relative; border-radius: 1rem; overflow: hidden;
   border: 1px solid var(--color-surface-3);
   min-height: 300px;
   background-image: linear-gradient(90deg, rgba(11,46,111,.90) 0%, rgba(11,46,111,.60) 42%, rgba(11,46,111,.08) 72%), url("/vb/wap7-side.jpg");
-  background-size: cover;
-  background-position: center 68%;
-  display: grid;
-  align-content: center;
-  padding: 1.5rem;
+  background-size: cover; background-position: center 68%;
+  display: grid; align-content: center; padding: 1.5rem;
 }
 .vb-hero h2, .vb-hero p { color: #fff; }
 
-/* full-bleed VB front shot strip (vb-front.jpg) */
 .vb-strip {
-  position: relative;
-  border-radius: 1rem;
-  overflow: hidden;
-  min-height: 180px;
+  position: relative; border-radius: 1rem; overflow: hidden; min-height: 180px;
   background-image: linear-gradient(0deg, rgba(11,46,111,.72) 0%, rgba(11,46,111,.15) 60%), url("/vb/vb-front.jpg");
-  background-size: cover;
-  background-position: center 30%;
-  display: grid;
-  align-content: end;
-  padding: 1rem 1.25rem;
+  background-size: cover; background-position: center 30%;
+  display: grid; align-content: end; padding: 1rem 1.25rem;
 }
 .vb-strip p { color: #fff; }
 
-/* rotating gallery card (aesthetic shots) */
 .vb-gallery { position: relative; border-radius: 1rem; overflow: hidden; min-height: 220px; }
 .vb-gallery img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .9s ease; }
 .vb-gallery img.on { opacity: 1; }
-
-
-
