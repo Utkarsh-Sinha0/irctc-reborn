@@ -167,8 +167,8 @@ body {
   border-radius: 1rem;
   overflow: hidden;
   border: 1px solid var(--color-surface-3);
-  min-height: 240px;
-  background-image: linear-gradient(90deg, rgba(11,46,111,.88) 0%, rgba(11,46,111,.55) 42%, rgba(11,46,111,0) 70%), url("/vb/wap7-side.jpg");
+  min-height: 300px;
+  background-image: linear-gradient(90deg, rgba(11,46,111,.90) 0%, rgba(11,46,111,.60) 42%, rgba(11,46,111,.08) 72%), url("/vb/wap7-side.jpg");
   background-size: cover;
   background-position: center 68%;
   display: grid;
@@ -176,6 +176,26 @@ body {
   padding: 1.5rem;
 }
 .vb-hero h2, .vb-hero p { color: #fff; }
+
+/* full-bleed VB front shot strip (vb-front.jpg) */
+.vb-strip {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  min-height: 180px;
+  background-image: linear-gradient(0deg, rgba(11,46,111,.72) 0%, rgba(11,46,111,.15) 60%), url("/vb/vb-front.jpg");
+  background-size: cover;
+  background-position: center 30%;
+  display: grid;
+  align-content: end;
+  padding: 1rem 1.25rem;
+}
+.vb-strip p { color: #fff; }
+
+/* rotating gallery card (aesthetic shots) */
+.vb-gallery { position: relative; border-radius: 1rem; overflow: hidden; min-height: 220px; }
+.vb-gallery img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .9s ease; }
+.vb-gallery img.on { opacity: 1; }
 
 
 

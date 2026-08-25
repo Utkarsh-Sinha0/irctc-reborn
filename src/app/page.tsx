@@ -6,6 +6,7 @@
  * G3-FUTURE: S. */
 import { useEffect, useState } from "react";
 import VandeBharatSweep from "@/app/components/VandeBharatSweep";
+import VBGallery from "@/app/components/VBGallery";
 
 const COMPLAINTS: { stat: string; src: string; fix: string; href: string }[] = [
   { stat: "40% mostly FAIL at Tatkal", src: "LocalCircles survey · 55,000+ responses", fix: "One-shot matrix + pre-staged flow", href: "/book/new?quota=TQ" },
@@ -24,8 +25,8 @@ export default function Landing() {
 
   return (
     <div className="grid gap-6">
-      {/* Hero: the real orange-snake livery shot + official drone footage embed */}
-      <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+      {/* Hero: real orange-snake livery shot + rotating VB gallery */}
+      <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
         <section className="vb-hero">
           <p className="text-xs font-bold uppercase tracking-widest text-[#FFB37A]">Vande Bharat · the train this product is built for</p>
           <h2 className="mt-1 text-2xl font-extrabold leading-tight lg:text-3xl">Booking should move<br />as fast as the train.</h2>
@@ -33,24 +34,23 @@ export default function Landing() {
             One search shows every class × every quota. Payment failures recover themselves.
             Refunds are visible before you cancel.
           </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <a href="/book/new?quota=TQ" className="min-h-11 rounded-lg bg-accent px-4 py-2.5 text-sm font-bold text-white transition hover:brightness-110">
+              Search trains →
+            </a>
+            <a href="/book/new?quota=TQ&scenario=pay-fail-recover" className="min-h-11 rounded-lg bg-white/15 px-4 py-2.5 text-sm font-bold text-white backdrop-blur transition hover:bg-white/25">
+              ▶ Watch payment recovery
+            </a>
+          </div>
           <p className="mt-3 text-[11px] text-white/60">Photo: Vande Bharat Express, CC BY-SA 4.0, Wikimedia Commons</p>
         </section>
 
-        <section className="overflow-hidden rounded-2xl border border-surface-3 bg-surface shadow-sm">
-          <div className="aspect-video w-full">
-            <iframe
-              className="h-full w-full"
-              src="https://www.youtube.com/embed/gwX-mo0_Xy8"
-              title="Vande Bharat drone view — Western Ghats (West Central Railway, official)"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            />
-          </div>
-          <p className="px-3 py-2 text-[11px] leading-tight opacity-60">
-            Official drone footage via West Central Railway, YouTube · the viral &ldquo;orange snake&rdquo; ghat-section run
-          </p>
-        </section>
+        <VBGallery />
+      </div>
+
+      {/* full-bleed front shot strip */}
+      <div className="vb-strip">
+        <p className="text-sm font-semibold">8 Vande Bharat corridors · 12 major stations · every quota, one screen</p>
       </div>
 
       {/* Vande Bharat sweep banner */}
