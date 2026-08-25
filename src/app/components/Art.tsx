@@ -3,7 +3,11 @@
  * reduced-motion-safe visuals for searching / booking confirmation moments.
  * G2-BEST: pure SVG + CSS animations (no video payload); train moves along track;
  * ticket stamps in with 3D flip. Compositor-friendly (transform/opacity only).
+ * The India-route Vande Bharat scene lives in IndiaRouteArt.tsx and is re-exported here
+ * so callers have a single import site.
  * G3-FUTURE: S — drop-in <SearchingArt/> or <ConfirmedArt/> anywhere. */
+export { IndiaRouteArt } from "@/app/components/IndiaRouteArt";
+
 
 export function SearchingArt({ label = "Scanning live seats across every quota…" }: { label?: string }) {
   return (

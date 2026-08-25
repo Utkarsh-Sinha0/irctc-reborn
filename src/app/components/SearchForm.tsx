@@ -9,7 +9,8 @@
 import { useCallback, useEffect, useState } from "react";
 import StationInput from "@/app/components/StationInput";
 import OtpVerify from "@/app/components/OtpVerify";
-import { SearchingArt } from "@/app/components/Art";
+import { IndiaRouteArt, SearchingArt } from "@/app/components/Art";
+
 import { useLang } from "@/app/components/lang";
 
 type Cell = {
@@ -106,7 +107,10 @@ export default function SearchForm({ initialQuota, scenario }: { initialQuota?: 
       <div aria-live="polite" className="mt-5 grid gap-3">
         {loading && !groups && (
           <>
-            <SearchingArt />
+            {/* Vande Bharat over the map of India while results load */}
+            <div className="rounded-2xl bg-gradient-to-b from-[#F2F8FF] to-surface ring-1 ring-surface-3 py-2">
+              <IndiaRouteArt compact />
+            </div>
             {[0, 1].map(i => (
               <div key={i} className="h-24 animate-pulse rounded-2xl bg-surface ring-1 ring-surface-3" />
             ))}

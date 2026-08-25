@@ -100,3 +100,34 @@ body {
 @keyframes artCheckDraw { from { stroke-dasharray: 40; stroke-dashoffset: 40; } to { stroke-dashoffset: 0; } }
 .art-check-draw { stroke-dasharray: 40; animation: artCheckDraw .45s ease-out .5s both; }
 
+/* ── IndiaRouteArt: Vande Bharat sets riding SVG paths ── */
+/* Consist origin is its own center so offset-path + scale reads correctly. */
+.art-vb-consist { offset-rotate: auto; offset-distance: 0%; }
+
+@keyframes artVbRunA {
+  /* Kashmir→Kanyakumari: rises toward screen (scale up mid-route), then descends */
+  0%   { offset-distance: 0%;   transform: scale(.5);  opacity: 0; }
+  8%   { opacity: 1; }
+  38%  { transform: scale(1.18); }           /* "rising up towards the screen" on the curve */
+  55%  { transform: scale(1.05); }
+  100% { offset-distance: 100%; transform: scale(.62); opacity: .95; }
+}
+.art-vb-run-a { animation: artVbRunA 3.4s cubic-bezier(.45,.05,.35,.95) infinite alternate; }
+
+@keyframes artVbRunB {
+  /* NE→Gujarat, same feel, phase-shifted so both are visible simultaneously */
+  0%   { offset-distance: 0%;   transform: scale(.5);  opacity: 0; }
+  10%  { opacity: 1; }
+  42%  { transform: scale(1.14); }
+  60%  { transform: scale(1.02); }
+  100% { offset-distance: 100%; transform: scale(.6); opacity: .95; }
+}
+.art-vb-run-b { animation: artVbRunB 3.8s cubic-bezier(.45,.05,.35,.95) infinite alternate; animation-delay: .4s; }
+
+@keyframes artRouteDraw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+.art-route-draw { stroke-dasharray: 1; animation: artRouteDraw 2.2s ease-out both; }
+
+@keyframes artArrivePulse { 0% { transform: scale(.4); opacity: 0; } 30% { opacity: .9; } 100% { transform: scale(2.6); opacity: 0; } }
+.art-arrive-pulse { animation: artArrivePulse 1.4s ease-out infinite; transform-origin: center; transform-box: fill-box; }
+
+
