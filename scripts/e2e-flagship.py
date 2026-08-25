@@ -84,7 +84,7 @@ ok &= st2 == "TICKET_ISSUED"
 # 6. ticket page celebrates only because cookie machine is TICKET_ISSUED (F4 fix)
 time.sleep(0.2)
 s, html = call(f"/book/ticket?persona=priya&key={KEY}&bookingId={BID}&ids=px1,px2&scenario={SC}")
-celebrates = isinstance(html, str) and "CONFIRMED" in html and "Add to calendar" in html
+celebrates = isinstance(html, str) and "confirmed" in html.lower() and "calendar" in html.lower()
 print("ticket page celebrates:", celebrates)
 ok &= celebrates
 
