@@ -32,7 +32,7 @@ export default async function TicketPage({ searchParams }: { searchParams: Promi
         <a href="/book/new" className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-primary px-6 font-semibold text-white">
           Start a booking →
         </a>
-        <p className="mt-4 text-base opacity-60">Demo note: nothing real was charged; synthetic data only.</p>
+        <p className="mt-4 text-base opacity-60">Nothing real was charged; synthetic data only.</p>
       </section>
     );
   }

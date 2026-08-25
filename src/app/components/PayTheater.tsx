@@ -125,7 +125,7 @@ export default function PayTheater({
         </m.div>
 
         <p className="mt-3 text-base opacity-60">
-          Demo note: no real money moves. The failure-and-recovery sequence is scripted so you can watch how we behave when things go wrong.
+          Note: no real money moves. The failure-and-recovery sequence is scripted so you can watch how we behave when things go wrong.
         </p>
       </section>
     </LazyMotion>

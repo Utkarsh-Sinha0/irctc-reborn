@@ -13,7 +13,7 @@ const mukta = Mukta({
 
 export const metadata: Metadata = {
   title: "IRCTC Reborn — Train tickets, rebuilt",
-  description: "Rail ticketing workspace: one-shot availability, honest fares, payment-failure recovery. Demo data.",
+  description: "Rail ticketing workspace: one-shot availability, honest fares, payment-failure recovery.",
 };
 
 export const viewport: Viewport = {
@@ -30,7 +30,7 @@ export const viewport: Viewport = {
 const NAV = [
   { href: "/", label: "Trains", active: true },
   { href: "/journey?pnr=4421876503", label: "PNR / Journey" },
-  { href: "/how-it-works", label: "About this demo" },
+  { href: "/how-it-works", label: "About" },
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -76,7 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <footer className="shrink-0 border-t border-black/10 bg-surface">
           <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-x-6 gap-y-1 px-4 py-2.5 text-[13px] opacity-70">
-            <span>Demo build — every rupee synthetic, every flow real. <a class-name="" href="/how-it-works" className="underline underline-offset-2">What&apos;s mocked</a></span>
+            <span>Prototype — every rupee synthetic, every flow real. <a href="/how-it-works" className="underline underline-offset-2">What&apos;s mocked</a></span>
             <span>57 tests · 100% line coverage · E2E verified on this deployment</span>
           </div>
         </footer>

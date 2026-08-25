@@ -25,8 +25,8 @@ export default function TicketCelebration({ idempotencyKey, ids, scenario = "cle
   const ics = useMemo(() => {
     const ics = [
       "BEGIN:VCALENDAR", "VERSION:2.0", "BEGIN:VEVENT",
-      `SUMMARY:Train journey (demo PNR ${pnr})`,
-      `DESCRIPTION:IRCTC Reborn demo ticket · ${count} passenger(s)`,
+      `SUMMARY:Train journey (PNR ${pnr})`,
+      `DESCRIPTION:IRCTC Reborn ticket · ${count} passenger(s)`,
       "DTSTART;VALUE=DATE:20260915", "DTEND;VALUE=DATE:20260916",
       "END:VEVENT", "END:VCALENDAR",
     ].join("\r\n");
@@ -59,7 +59,7 @@ export default function TicketCelebration({ idempotencyKey, ids, scenario = "cle
         >
           {/* header band */}
           <div className="flex items-center justify-between bg-primary-dark px-5 py-2.5 text-white">
-            <span className="text-sm font-bold tracking-wide">E-TICKET · IRCTC REBORN (DEMO)</span>
+            <span className="text-sm font-bold tracking-wide">E-TICKET · IRCTC REBORN</span>
             <span className="rounded bg-success/90 px-2 py-0.5 text-xs font-bold">✓ CONFIRMED</span>
           </div>
 

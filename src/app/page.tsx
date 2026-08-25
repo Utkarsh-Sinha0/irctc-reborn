@@ -64,7 +64,7 @@ export default function Landing() {
         </div>
 
         <div className="rounded-xl border border-surface-3 bg-surface p-4 text-[13px] leading-relaxed opacity-80 shadow-sm">
-          <strong className="opacity-100">No slop promise:</strong> every number on this screen is from published
+          <strong className="opacity-100">Evidence promise:</strong> every number on this screen is from published
           surveys/coverage; every fare from a tested rules engine; every rupee synthetic.
         </div>
       </aside>
