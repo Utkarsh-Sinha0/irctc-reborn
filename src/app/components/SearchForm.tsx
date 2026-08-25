@@ -7,6 +7,10 @@
    engine output; skeleton min 400ms; memory-light (no cached duplicates).
    G3-FUTURE: S — scenario passthrough preserved; matrix engine owns all rules. */
 import { useCallback, useEffect, useState } from "react";
+import StationInput from "@/app/components/StationInput";
+import OtpVerify from "@/app/components/OtpVerify";
+import { SearchingArt } from "@/app/components/Art";
+import { useLang } from "@/app/components/lang";
 
 type Cell = {
   quota: "GN" | "TQ" | "PT";
@@ -39,6 +43,7 @@ const KIND_TEXT: Record<Cell["kind"], string> = {
 
 export default function SearchForm({ initialQuota, scenario }: { initialQuota?: "GN" | "TQ"; scenario: string }) {
   void initialQuota; // kept for URL compatibility — quota picker is gone by design
+  const { t } = useLang();
   const tomorrow = new Date(Date.now() + 864e5).toISOString().slice(0, 10);
   const [from, setFrom] = useState("PUNE");
   const [to, setTo] = useState("NDLS");
@@ -46,6 +51,11 @@ export default function SearchForm({ initialQuota, scenario }: { initialQuota?: 
   const [loading, setLoading] = useState(false);
   const [groups, setGroups] = useState<Group[] | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  // M02: identity gate — first booking action asks a paste-friendly OTP (any 6 digits).
+  const [otpDone, setOtpDone] = useState(false);
+  const [showOtp, setShowOtp] = useState(false);
+  // M24: watcher — honest arming state per cell key; armed = "watching ✓".
+  const [watcherArmed, setWatcherArmed] = useState<string | null>(null);
 
   const search = useCallback(async () => {
     if (from === to) { setErr("Origin and destination must differ."); return; }
@@ -77,32 +87,31 @@ export default function SearchForm({ initialQuota, scenario }: { initialQuota?: 
       <h1 className="text-2xl font-bold text-primary-dark">Where to?</h1>
       <p className="mt-1 text-base opacity-75">Every class · every quota · one screen — pick your cell.</p>
 
-      <form className="mt-4 grid gap-3 rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-surface-3 md:grid-cols-[1fr_1fr_1fr_auto] md:items-end">
-        <label className="text-base font-medium">From
-          <input value={from} onChange={e => setFrom(e.target.value.toUpperCase())}
-            className="mt-1 w-full min-h-12 rounded-xl border border-surface-3 bg-surface-2 px-3 font-semibold uppercase" maxLength={6} />
-        </label>
-        <label className="text-base font-medium">To
-          <input value={to} onChange={e => setTo(e.target.value.toUpperCase())}
-            className="mt-1 w-full min-h-12 rounded-xl border border-surface-3 bg-surface-2 px-3 font-semibold uppercase" maxLength={6} />
-        </label>
-        <label className="text-base font-medium">Date
+      <form className="mt-4 grid gap-3 rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-surface-3 md:grid-cols-[1fr_1fr_1fr_auto] md:items-end"
+        onSubmit={(e) => { e.preventDefault(); void search(); }}>
+        <StationInput label={t("From", "कहाँ से")} value={from} onChange={setFrom} />
+        <StationInput label={t("To", "कहाँ तक")} value={to} onChange={setTo} />
+        <label className="text-base font-medium">{t("Date", "तारीख")}
           <input type="date" value={date} onChange={e => setDate(e.target.value)}
             className="mt-1 w-full min-h-12 rounded-xl border border-surface-3 bg-surface-2 px-3" />
         </label>
         {/* live search on date change — no submit needed */}
         <button type="submit" disabled={loading}
           className="min-h-12 rounded-xl bg-primary px-8 font-semibold text-white active:scale-[.99] transition disabled:opacity-60">
-          {loading ? "…" : "Search"}
+          {loading ? "…" : t("Search", "खोजें")}
         </button>
         {err && <p role="alert" className="rounded-xl bg-white px-3 py-2 text-error ring-1 ring-error/40 md:col-span-4">⚠ {err}</p>}
       </form>
 
       <div aria-live="polite" className="mt-5 grid gap-3">
-        {loading && !groups &&
-          [0, 1].map(i => (
-            <div key={i} className="h-44 animate-pulse rounded-2xl bg-surface ring-1 ring-surface-3" />
-          ))}
+        {loading && !groups && (
+          <>
+            <SearchingArt />
+            {[0, 1].map(i => (
+              <div key={i} className="h-24 animate-pulse rounded-2xl bg-surface ring-1 ring-surface-3" />
+            ))}
+          </>
+        )}
         {!loading && groups?.length === 0 && (
           <p className="rounded-2xl bg-surface p-4 ring-1 ring-surface-3">
             No direct trains found. Try nearby dates or PUNE→NDLS.
@@ -140,9 +149,13 @@ export default function SearchForm({ initialQuota, scenario }: { initialQuota?: 
                       return (
                         <td key={cell.quota} className="px-2 py-2 align-top">
                           <a
-                            href={onward(g.train.number, row.travelClass, cell.quota)}
+                            href={otpDone ? onward(g.train.number, row.travelClass, cell.quota) : undefined}
                             data-testid={`cell-${g.train.number}-${row.travelClass}-${cell.quota}`}
-                            className="block min-h-14 rounded-xl p-2 ring-1 ring-surface-3 hover:ring-primary active:scale-[.98] transition"
+                            onClick={(e) => {
+                              if (!otpDone) { e.preventDefault(); setShowOtp(true); }
+                            }}
+                            aria-disabled={!otpDone}
+                            className={`block min-h-14 rounded-xl p-2 ring-1 transition ${otpDone ? "ring-surface-3 hover:ring-primary active:scale-[.98]" : "ring-surface-3/70"}`}
                           >
                             <span className="flex items-center gap-1.5">
                               <span className={`inline-block h-2 w-2 rounded-full ${KIND_DOT[cell.kind]}`} aria-hidden />
@@ -152,6 +165,16 @@ export default function SearchForm({ initialQuota, scenario }: { initialQuota?: 
                             <span className="block text-sm opacity-75">{bandLine}</span>
                             {cell.quota === "PT" && cell.premiumX && (
                               <span className="block text-sm opacity-60">{cell.premiumX}× fare</span>
+                            )}
+                            {!cell.autoRefundIfNot && cell.quota !== "PT" && (
+                              <button
+                                type="button"
+                                title="Arm a waitlist watcher for this train+date"
+                                onClick={(ev) => { ev.preventDefault(); setWatcherArmed(`${g.train.number}-${row.travelClass}-${cell.quota}`); }}
+                                className="mt-1 rounded bg-primary/10 px-1.5 py-0.5 text-xs font-semibold text-primary hover:bg-primary/20"
+                              >
+                                {watcherArmed === `${g.train.number}-${row.travelClass}-${cell.quota}` ? "👁 watching ✓" : "👁 watch"}
+                              </button>
                             )}
                             <span className="sr-only">{QUOTA_LABEL[cell.quota]} quota</span>
                           </a>
@@ -165,6 +188,18 @@ export default function SearchForm({ initialQuota, scenario }: { initialQuota?: 
           </article>
         ))}
       </div>
+
+      {showOtp && !otpDone && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4" role="dialog" aria-modal="true" aria-label="Verify identity">
+          <div className="w-full max-w-sm">
+            <OtpVerify personaId="priya" onDone={() => { setOtpDone(true); setShowOtp(false); }} />
+            <button onClick={() => setShowOtp(false)}
+              className="mt-2 w-full min-h-10 rounded-lg bg-surface text-sm font-medium opacity-75 ring-1 ring-surface-3">
+              Later
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

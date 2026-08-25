@@ -63,6 +63,20 @@ export default function Landing() {
           </ul>
         </div>
 
+        <div className="rounded-xl border border-surface-3 bg-surface p-4 shadow-sm">
+          <p className="text-xs font-bold uppercase tracking-wider opacity-50">Sample profiles</p>
+          <p className="mt-1 text-[13px] leading-snug opacity-70">Adaptive home demos — each reorders the workspace for a traveller type. Synthetic, no real accounts.</p>
+          <div className="mt-2 grid grid-cols-3 gap-1.5">
+            {[["priya", "Tatkal racer"], ["sharmaji", "Elder · 68"], ["fatima", "Family of 6"]].map(([id, label]) => (
+              <a key={id} href={`/home/${id}`}
+                className="min-h-16 rounded-lg bg-surface-3 px-2 py-2 text-center transition hover:bg-primary/10">
+                <span className="block text-sm font-semibold capitalize">{id}</span>
+                <span className="block text-[11px] leading-tight opacity-65">{label}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
         <div className="rounded-xl border border-surface-3 bg-surface p-4 text-[13px] leading-relaxed opacity-80 shadow-sm">
           <strong className="opacity-100">Evidence promise:</strong> every number on this screen is from published
           surveys/coverage; every fare from a tested rules engine; every rupee synthetic.

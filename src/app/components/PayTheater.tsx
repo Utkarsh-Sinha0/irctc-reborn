@@ -5,6 +5,7 @@
    come from API responses — UI never invents money claims. G3-FUTURE: S. */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LazyMotion, domAnimation, m } from "motion/react";
+import { ConfirmedArt } from "@/app/components/Art";
 
 type Phase =
   | { k: "idle" } | { k: "narrating"; text: string }
@@ -112,7 +113,12 @@ export default function PayTheater({
             </div>
           )}
 
-          {phase.k === "done" && <p aria-live="polite" className="py-2 font-semibold text-success">✅ Payment verified — issuing ticket…</p>}
+          {phase.k === "done" && (
+            <div aria-live="polite" className="py-1">
+              <ConfirmedArt small />
+              <p className="-mt-2 text-center font-semibold text-success">Payment verified — issuing ticket…</p>
+            </div>
+          )}
 
           {phase.k === "error" && (
             <div role="alert" className="rounded-xl border border-warn/50 bg-warn/5 p-4">
