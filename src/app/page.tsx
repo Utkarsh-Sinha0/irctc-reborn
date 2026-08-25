@@ -1,10 +1,11 @@
 "use client";
 /* G1-WHY: landing = the booking workspace itself (no marketing surface, no personas).
- * Dense IRCTC-style search strip + live one-shot matrix + evidence ticker of REAL
- * citizen complaints the fixes map to. Desktop 12-col grid; mobile stacks.
- * G2-BEST: reuses SearchForm engine wiring; complaint data is static research ground truth.
+ * Vande Bharat sweep banner (outline SVG, right→left) + dense search strip + evidence
+ * ticker of REAL citizen complaints. Photo strip from CC-licensed Wikimedia shots.
+ * G2-BEST: reuses SearchForm engine wiring; complaint data is research ground truth.
  * G3-FUTURE: S. */
 import { useEffect, useState } from "react";
+import VandeBharatSweep from "@/app/components/VandeBharatSweep";
 
 const COMPLAINTS: { stat: string; src: string; fix: string; href: string }[] = [
   { stat: "40% mostly FAIL at Tatkal", src: "LocalCircles survey · 55,000+ responses", fix: "One-shot matrix + pre-staged flow", href: "/book/new?quota=TQ" },
@@ -22,7 +23,11 @@ export default function Landing() {
   const c = COMPLAINTS[tick];
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
+    <div className="grid gap-6">
+      {/* Vande Bharat sweep banner */}
+      <VandeBharatSweep />
+
+      <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
       <section aria-label="Search trains">
         <h1 className="text-xl font-bold">Search trains</h1>
         <p className="mt-0.5 text-sm opacity-70">
@@ -81,7 +86,17 @@ export default function Landing() {
           <strong className="opacity-100">Evidence promise:</strong> every number on this screen is from published
           surveys/coverage; every fare from a tested rules engine; every rupee synthetic.
         </div>
+
+        {/* real Vande Bharat, CC-licensed (attribution required by CC BY-SA) */}
+        <div className="rounded-xl border border-surface-3 bg-surface p-2 shadow-sm">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/vb/platform.jpg" alt="Vande Bharat Express at New Delhi platform (CC BY-SA 4.0, Wikimedia)" className="h-28 w-full rounded-lg object-cover" />
+          <p className="px-1 pt-1 text-[11px] leading-tight opacity-55">
+            Vande Bharat Express, New Delhi · photo CC BY-SA 4.0 via Wikimedia Commons
+          </p>
+        </div>
       </aside>
+      </div>
     </div>
   );
 }
